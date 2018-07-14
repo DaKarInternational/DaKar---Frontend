@@ -4,6 +4,7 @@ import './App.css';
 import Journey from './Journey'
 
 class App extends Component {
+
   render() {
     return (
       <div className="App">
