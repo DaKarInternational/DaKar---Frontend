@@ -4,16 +4,22 @@
   "private": true,
   "dependencies": {
     "axios": "^0.18.0",
+    "babel-plugin-relay": "^1.6.2",
+    "graphql": "^0.13.2",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
+    "react-relay": "^1.6.2",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "1.1.4"
+    "react-scripts": "1.1.4",
+    "relay-compiler": "^1.6.2",
+    "relay-runtime": "^1.6.2"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "build": "node ./setup && react-scripts build",
+    "test": "node ./setup && react-scripts test --env=jsdom",
+    "start": "node ./setup && react-scripts start",
+    "eject": "react-scripts eject",
+    "relay": "relay-compiler --src ./src --schema ./src/schema.graphql"
   }
 }
