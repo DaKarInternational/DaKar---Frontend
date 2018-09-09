@@ -1,4 +1,20 @@
-<<<<<<< HEAD
+# Relay
+- Le fichier Environment.js permet de gérer le client relay
+- Pour lancer des requêtes Graphql le schema doit être présent dans le projet
+- Si une requête change côté schema ou côté js, il faut relancer yarn relay (npm run relay) pour recompiler les requêtes.
+ Par ailleurs la console du navigateur vous indiquera si un changement a été effectué.
+ - Babel est utilisé par Relay, et pour injecter le babel-plugin-relay, il existe plusieurs options, mais pour le moment l'option qui a été mise en place est de faire un yarn eject (npm run eject). A terme il faudra probablement trouver une autre façon de travailler.
+
+# Yarn
+Yarn est utilisé sur ce projet, mais il est possible d'utiliser npm
+
+# Lancement de l'application
+- Il suffit de faire un yarn start (npm start) depuis le dossier du projet.
+- Pour lancer les requêtes il suffit de mettre à disposition l'endpoint graphql côté back. Donc toutes les versions de Dakar côté back sont normalement opérationnelles pour cela.
+
+# Ajout de packages
+yarn add ou npm install
+
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>
