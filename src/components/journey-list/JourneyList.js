@@ -1,80 +1,80 @@
-import React, { Component }  from 'react'
+import React, { Component } from 'react'
 import Journey from './../journey/Journey'
-import axios from 'axios';
+import { QueryRenderer, graphql } from "react-relay";
+import environment from './../../Environment';
 
 /**
  * Class allowing display of the journey list
  */
+
+// This is the GraphQL query for allJourney
+const query = graphql`
+    query JourneyListQuery {
+      allJourney {
+        destination
+        price
+        id
+      }
+    }
+    `;
+
+// These variables are optional we can leave empty
+const variables = {};
+
 class JourneyList extends Component {
 
-state = {
-  error: null,
-  isLoaded: false,
-  items: []
-}
-
-/**
- * The content is executed after the page is displayed
- */
-componentDidMount() {
-  // This is the GraphQL query for allJourney
-  const query = `
-  {
-    allJourney {
-      destination
-      price
-    }
+  state = {
+    error: null,
+    isLoaded: false,
+    items: []
   }
-  `;
 
-  // These variables are optional we can leave empty
-  const variables = {};
+  // This render the html page to display journey list
+  render() {
 
-  // We call the method here to execute our async function
-  this.getJourneyList(query, variables)
-
-}
-
-/**
- * Get the journey list from the server
- */
-getJourneyList = async (query, variables) => {
-  try {
-    const response = await axios.post('http://localhost:8080/graphql', {
-      query,
-      variables
-    });
-
-    // Log the response so we can look at it in the console
-
-    // Set the data to the state
-    this.setState(() => ({
-      isLoaded: true,
-      items: response.data.data.allJourney
-    }));
-
-  } catch (error) {
-    // If there's an error, set the error to the state
-    this.setState(() => ({ error }))
+    return (<QueryRenderer
+      environment={environment} //Here is the enviroment that we configured before
+      variables={variables} //Passing the params/variables that we created
+      query={query} //And here goes your GraphQL query
+      render={
+        ({ error, props }) => {
+          if (error) {
+            //Here we pass our error view in case of query errors or fetch failure
+            return <div>{error.message}</div>;
+          } else if (props) {
+            //Here we pass our component that should be rendered
+            return props.allJourney.map((journey, index) => (
+              <Journey key={index} {...journey} />
+            ));
+          }
+          //Here goes our activity indicator or loading view
+          return <div>Loading...</div>;
+        }
+      }
+    />
+    )
   }
-}
 
-// The new render()
-render() {
-  const { error, isLoaded, items } = this.state;
-
-  if (error) {
-    return <div>{error.message}</div>;
-  } else if (!isLoaded) {
-    return <div>Loading...</div>;
-  } else {
-  
-    return items.map((journey, index) => (
-      <Journey key={index} {...journey} />
-    ));
-  
+  render() {
+    return (
+      <div>
+        <QueryRenderer
+          environment={environment}
+          query={query}
+          render={({ error, props }) => {
+            if (error) {
+              return <div>{error.message}</div>
+            } else if (props) {
+              return <div>{props.allJourney.map((journey) => (
+                <Journey key={journey.id} {...journey} />
+              ))} </div>
+            }
+            return <div>Loading</div>
+          }}
+        />
+      </div>
+    )
   }
-}
 
 }
 
