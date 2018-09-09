@@ -8,17 +8,16 @@ import './App.css';
 
 class App extends Component {
 
-// Render the Application
-render() {
+  // Render the Application
+  render() {
 
-  return (
-    <div>
-      <Header/>
-      <Main/>
-    </div>
-  );
-}
-
+    return (
+      <div>
+        <Header/>
+        <Main/>
+      </div>
+    );
+  }
 }
 
 export default App;
