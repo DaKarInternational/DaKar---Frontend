@@ -1,11 +1,8 @@
-
 import React from 'react'
 
 import './Journey.css'
 
-
 const Journey = (props) => (
-
     <div>
         <div>
             Destination : {props.destination}
@@ -17,4 +14,3 @@ const Journey = (props) => (
 )
 
 export default Journey
-
