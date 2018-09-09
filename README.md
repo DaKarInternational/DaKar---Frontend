@@ -2459,7 +2459,3 @@ In the future, we might start automatically compiling incompatible third-party m
 ## Something Missing?
 
 If you have ideas for more “How To” recipes that should be on this page, [let us know](https://github.com/facebookincubator/create-react-app/issues) or [contribute some!](https://github.com/facebookincubator/create-react-app/edit/master/packages/react-scripts/template/README.md)
-=======
-# DaKar---Frontend
-The frontend part of DaKar project
->>>>>>> c6923ad2ccc180d47acc01ca071e9be8287be26f
