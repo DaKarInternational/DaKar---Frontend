@@ -10,7 +10,6 @@ class App extends Component {
 
   // Render the Application
   render() {
-
     return (
       <div>
         <Header/>

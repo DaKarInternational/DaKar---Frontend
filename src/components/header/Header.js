@@ -16,6 +16,7 @@ const Header = () => (
         <li><Link to='/'>Home</Link></li>
         <li><Link to='/journeys'>List of journeys</Link></li>
         <li><Link to='/journeyDisplay'>Display a journey</Link></li>
+        <li><Link to='/createJourney'>Create a journey</Link></li>
       </ul>
     </nav>
   </header>
