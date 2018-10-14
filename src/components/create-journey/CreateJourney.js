@@ -39,7 +39,7 @@ class CreateJourney extends Component {
                 console.error('no such state attribut')
                 break;
         }
-    }.bind(this)
+    }.bind(this);
 
     /**
      * Create the new Journey
@@ -56,7 +56,7 @@ class CreateJourney extends Component {
                         price
                         destination
                     }
-        }`
+        }`;
 
         // These variables are optional we can leave empty
         const variables = {};
@@ -67,7 +67,6 @@ class CreateJourney extends Component {
                 variables
             }).then((response) => {
                 // Log the response so we can look at it in the console
-                console.log('response.data :')
                 console.dir(response.data)
                 // TODO : Gestion des erreurs
                 // Set the data to the state
