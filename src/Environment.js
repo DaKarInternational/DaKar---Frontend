@@ -5,14 +5,14 @@ import { Environment, Network, RecordSource, Store } from "relay-runtime";
  * This class is used to setup the relay client environment
  */
 
-const store = new Store(new RecordSource);
+const store = new Store(new RecordSource());
 
 // Create a network layer from the fetch function
 const network = Network.create(fetchQuery);
 
 // Function to send graphql on the endpoint
 function fetchQuery(operation, variables, cacheConfig, uploadables) {
-  return fetch('http://localhost:8080/graphql' , {
+  return fetch('http://localhost:8080/graphql', {
     method: "POST",
     headers: {
       Accept: "application/json",

@@ -8,17 +8,15 @@ import './App.css';
 
 class App extends Component {
 
-// Render the Application
-render() {
-
-  return (
-    <div>
-      <Header/>
-      <Main/>
-    </div>
-  );
-}
-
+  // Render the Application
+  render() {
+    return (
+      <div>
+        <Header/>
+        <Main/>
+      </div>
+    );
+  }
 }
 
 export default App;

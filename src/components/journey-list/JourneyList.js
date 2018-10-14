@@ -54,28 +54,6 @@ class JourneyList extends Component {
     />
     )
   }
-
-  render() {
-    return (
-      <div>
-        <QueryRenderer
-          environment={environment}
-          query={query}
-          render={({ error, props }) => {
-            if (error) {
-              return <div>{error.message}</div>
-            } else if (props) {
-              return <div>{props.allJourney.map((journey) => (
-                <Journey key={journey.id} {...journey} />
-              ))} </div>
-            }
-            return <div>Loading</div>
-          }}
-        />
-      </div>
-    )
-  }
-
 }
 
 export default JourneyList;
