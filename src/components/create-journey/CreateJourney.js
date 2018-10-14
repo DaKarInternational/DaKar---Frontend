@@ -75,7 +75,6 @@ class CreateJourney extends Component {
                     firstDisplay: false,
                     journey: response.data.data.createJourney
                 }));
-                console.log('state :')
                 console.dir(this.state)
             });
         } catch (error) {
