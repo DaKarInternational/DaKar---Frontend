@@ -25,15 +25,15 @@ class JourneyDisplay extends Component {
     /**
      * Bring a journey from the server (graphql)
      */
-    getJourney = async (query, variables) => {
+    getJourney = async (query, variables) => { //TODO: see if we can use RxJs instead of async await
         try {
-            const response = await axios.post('http://localhost:8080/graphql', {
+            const response = await axios.post('http://localhost:8080/graphql', {// TODO: put the URL in a properties file
                 query,
                 variables
             });
 
             // Log the response so we can look at it in the console
-            console.log('response.data : ' + response.data)
+            console.log('response.data: ' + response.data)
             // TODO : Gestion des erreurs
             // Set the data to the state
             this.setState(() => ({
@@ -51,7 +51,7 @@ class JourneyDisplay extends Component {
 
     /**
      * Handle change on the input field
-     * @param {} e 
+     * @param {} e the onChange event
      */
     handleChange(e) {
         this.setState({ journeyId: e.target.value });
@@ -64,15 +64,12 @@ class JourneyDisplay extends Component {
         // This is the GraphQL query for findJourney
         let query = `
             query findJourney {
-                findJourneyById(id:"`
-        query += this.state.journeyId
-        query += `") {
+                findJourneyById(id:"${this.state.journeyId}") {
                     id
                     destination
                     price
                 }
-            }
-            `;
+            }`;
 
         // These variables are optional we can leave empty
         const variables = {};

@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import Journey from './../journey/Journey'
 import axios from 'axios';
+import JourneyService from '../../services/JourneyService'
 
 /**
- * Class allowing the feature of creation of a journey
+ * Component allowing the feature of creation of a journey
  */
 class CreateJourney extends Component {
 
@@ -14,21 +15,17 @@ class CreateJourney extends Component {
             error: null,
             isLoaded: false,
             firstDisplay: true,
-            journey: [],
-            journeyId: null
+            journey: {} // empty object for init
         }
     };
 
     /**
      * Handle change on the input field
-     * @param {} e 
+     * @param {} e the onChange event 
      */
-    handleChange = function(e) {
-        // console.log(e.target)
-        switch(e.target.name){
-            case 'journey-id':
-                this.setState({ journeyId: e.target.value });
-                break;
+    handleChange = function (e) {
+        console.log(e.target.name);
+        switch (e.target.name) {
             case 'destination':
                 this.setState({ destination: e.target.value });
                 break;
@@ -36,23 +33,20 @@ class CreateJourney extends Component {
                 this.setState({ price: e.target.value });
                 break;
             default:
-                console.error('no such state attribut')
+                console.error('No such state attribut')
                 break;
         }
     }.bind(this);
 
     /**
-     * Create the new Journey
-     * @param {} e 
+     * Create the new Journey once the button is clicked
+     * @param {} e the onClick event
      */
-    createJourney = function(e) {
-        // console.log(e)
+    createJourney = function (e) {
+        JourneyService.test();
+
         let query = `mutation {
-            createJourney(input:{ price: "`
-            query += this.state.price
-            query += `" destination: "`
-            query += this.state.destination
-            query += `" }){
+            createJourney(input:{ price: "${this.state.price}" destination: "${this.state.destination}" }){
                         price
                         destination
                     }
@@ -62,24 +56,25 @@ class CreateJourney extends Component {
         const variables = {};
 
         try {
-            axios.post('http://localhost:8080/graphql', {
+            // is there a way to use Relay here instead of directly axios ?
+            axios.post('http://localhost:8080/graphql', {// TODO export this URL into a config file
                 query,
                 variables
             }).then((response) => {
                 // Log the response so we can look at it in the console
-                console.dir(response.data)
+                console.dir(response.data);
                 // TODO : Gestion des erreurs
                 // Set the data to the state
                 this.setState(() => ({
                     isLoaded: true,
                     firstDisplay: false,
-                    journey: response.data.data.createJourney
+                    journey: response.data.data.createJourney // put the Journey that we received from the back in the state
                 }));
-                console.dir(this.state)
+                console.dir(this.state);
             });
         } catch (error) {
             // If there's an error, set the error to the state
-            console.log('error : ' + error);
+            console.log('error: ' + error);
             this.setState(() => ({ error }))
         }
     }.bind(this);
@@ -95,21 +90,20 @@ class CreateJourney extends Component {
         } else if (!isLoaded) {
             elementContent = <div>Loading...</div>
         } else {
-            elementContent = <Journey key={journey.id} {...journey} />
+            // usage of the spread operator:
+            // https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Op%C3%A9rateurs/Syntaxe_d%C3%A9composition
+            elementContent = <Journey {...journey} /> 
         }
 
         return (
             <div>
-                <label htmlFor="journey-id">Journey id: </label>
-                <input id="journey-id" type="text" name="journeyId" onChange={this.handleChange} />
-                <br/>
                 <label htmlFor="destination">Journey destination: </label>
                 <input id="destination" type="text" name="destination" onChange={this.handleChange} />
-                <br/>
-                <label htmlFor="price">Create a journey : </label>
+                <br />
+                <label htmlFor="price">Price: </label>
                 <input id="price" type="text" name="price" onChange={this.handleChange} />
-                <br/>
-                <button onClick={this.createJourney}>Validate</button>
+                <br />
+                <button onClick={this.createJourney}>Create</button>
                 <div>
                     {elementContent}
                 </div>

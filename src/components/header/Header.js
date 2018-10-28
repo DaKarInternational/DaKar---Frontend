@@ -7,8 +7,7 @@ const Header = () => (
   <header>
     <div className="App">
       <div className="App-header">
-        <img src="https://cdn-images-1.medium.com/fit/t/1600/480/1*sxMljQ8wgso4cG3PxufTmQ.png" className="App-logo" alt="logo" />
-        <h2>Your first GraphQL Component</h2>
+        <h2>Dakar</h2>
       </div>
     </div>
     <nav>
