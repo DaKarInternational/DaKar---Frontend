@@ -33,7 +33,7 @@ class CreateJourney extends Component {
                 this.setState({ price: e.target.value });
                 break;
             default:
-                console.error('No such state attribut')
+                console.error('No such state attribut');
                 break;
         }
     }.bind(this);
