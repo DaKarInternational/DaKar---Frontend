@@ -27,7 +27,7 @@ class JourneyDisplay extends Component {
      */
     getJourney = async (query, variables) => { //TODO: see if we can use RxJs instead of async await
         try {
-            const response = await axios.post('http://localhost:8080/graphql', {// TODO: put the URL in a properties file
+            const response = await axios.post('http://localhost:8080/graphql', { // TODO: put the URL in a properties file
                 query,
                 variables
             });
