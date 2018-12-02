@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Journey from './../journey/Journey'
 import axios from 'axios';
+import Button from '@material-ui/core/Button';
 
 /**
  * Class allowing the feature of displaying a journey
@@ -99,7 +100,7 @@ class JourneyDisplay extends Component {
             <div>
                 <label htmlFor="journey-id">Visualiser une journey : </label>
                 <input id="journey-id" type="text" name="journeyId" onChange={this.handleChange} />
-                <button onClick={this.findJourney}>Valider</button>
+                <Button onClick={this.findJourney} variant="contained" color="primary">Valider</Button>
                 <div>
                     {elementContent}
                 </div>

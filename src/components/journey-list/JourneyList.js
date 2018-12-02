@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Journey from './../journey/Journey'
 import { QueryRenderer, graphql } from "react-relay";
 import environment from './../../Environment';
+import Grid from '@material-ui/core/Grid';
 
 /**
  * Class allowing display of the journey list
@@ -43,9 +44,18 @@ class JourneyList extends Component {
             return <div>{error.message}</div>;
           } else if (props) {
             //Here we pass our component that should be rendered
-            return props.allJourney.map((journey, index) => (
-              <Journey key={index} {...journey} />
-            ));
+            return <div>
+              <Grid container spacing={24} style={{ padding: 24 }}>
+                {props.allJourney.map((currentJourney) => (
+                  <Grid item xs={12} sm={6} lg={4} xl={3}>
+                    <Journey journey={currentJourney} />
+                  </Grid>
+                ))}
+              </Grid>
+            </div>;
+
+
+
           }
           //Here goes our activity indicator or loading view
           return <div>Loading...</div>;
