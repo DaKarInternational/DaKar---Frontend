@@ -1,8 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom'
-import TextField from '@material-ui/core/TextField';
-import MenuItem from '@material-ui/core/MenuItem';
-import MenuList from '@material-ui/core/MenuList';
 
 const Home = () => (
   <div>

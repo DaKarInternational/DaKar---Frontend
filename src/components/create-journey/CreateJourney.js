@@ -1,6 +1,30 @@
 import React, { Component } from 'react'
-import Journey from './../journey/Journey'
+import JourneyCard from './../journey-card/JourneyCard'
 import axios from 'axios';
+import TextField from '@material-ui/core/TextField';
+import { withStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
+import Button from '@material-ui/core/Button';
+
+const styles = theme => ({
+    container: {
+        display: 'flex',
+        flexWrap: 'wrap',
+    },
+    textField: {
+        marginLeft: theme.spacing.unit,
+        marginRight: theme.spacing.unit,
+        width: 200,
+    },
+    parent: {
+        width: 500,
+        margin: '0 auto',
+      },
+    actions: {
+        textAlign: 'center',
+        marginTop: 20,
+    }
+});
 
 /**
  * Class allowing the feature of creation of a journey
@@ -20,39 +44,25 @@ class CreateJourney extends Component {
     };
 
     /**
-     * Handle change on the input field
-     * @param {} e 
+     * Save the value of the field when it changes
      */
-    handleChange = function(e) {
-        // console.log(e.target)
-        switch(e.target.name){
-            case 'journey-id':
-                this.setState({ journeyId: e.target.value });
-                break;
-            case 'destination':
-                this.setState({ destination: e.target.value });
-                break;
-            case 'price':
-                this.setState({ price: e.target.value });
-                break;
-            default:
-                console.error('no such state attribut')
-                break;
-        }
-    }.bind(this);
+    handleChange = name => event => {
+        this.setState({
+            [name]: event.target.value,
+        });
+    };
 
     /**
      * Create the new Journey
      * @param {} e 
      */
-    createJourney = function(e) {
-        // console.log(e)
+    createJourney = function (e) {
         let query = `mutation {
             createJourney(input:{ price: "`
-            query += this.state.price
-            query += `" destination: "`
-            query += this.state.destination
-            query += `" }){
+        query += this.state.price
+        query += `" destination: "`
+        query += this.state.destination
+        query += `" }){
                         price
                         destination
                     }
@@ -75,7 +85,8 @@ class CreateJourney extends Component {
                     firstDisplay: false,
                     journey: response.data.data.createJourney
                 }));
-                console.dir(this.state)
+                // We redirect to the list of journeys
+                this.props.history.push('/journeys');
             });
         } catch (error) {
             // If there's an error, set the error to the state
@@ -84,38 +95,56 @@ class CreateJourney extends Component {
         }
     }.bind(this);
 
-    // The render() of the JourneyDisplay page
+    /**
+     * Display the form
+     * If there is an error, it's also displayed
+     */
     render() {
-        const { error, isLoaded, journey, firstDisplay } = this.state;
-        let elementContent;
-        if (error) {
-            elementContent = <div>{error.message}</div>;
-        } else if (firstDisplay) {
-            elementContent = <div></div>
-        } else if (!isLoaded) {
-            elementContent = <div>Loading...</div>
-        } else {
-            elementContent = <Journey key={journey.id} {...journey} />
-        }
+        const { classes } = this.props;
+        // Gestion d'erreur à définir
+        // const { error, isLoaded, journey, firstDisplay } = this.state;
+        // let elementContent = <div></div>;
+        // if (error) {
+        //     elementContent = <div>{error.message}</div>;
+        // } else if (firstDisplay) {
+        //     elementContent = <div></div>
+        // } else if (!isLoaded) {
+        //     elementContent = <div>Loading...</div>
+        // } else {
+        //     elementContent = <JourneyCard key={journey.id} {...journey} />
+        // }
 
         return (
-            <div>
-                <label htmlFor="journey-id">Journey id: </label>
-                <input id="journey-id" type="text" name="journeyId" onChange={this.handleChange} />
-                <br/>
-                <label htmlFor="destination">Journey destination: </label>
-                <input id="destination" type="text" name="destination" onChange={this.handleChange} />
-                <br/>
-                <label htmlFor="price">Create a journey : </label>
-                <input id="price" type="text" name="price" onChange={this.handleChange} />
-                <br/>
-                <button onClick={this.createJourney}>Validate</button>
-                <div>
-                    {elementContent}
-                </div>
+
+            <div className={classes.parent}>
+                <form>
+                    <div className={classes.container}>
+                        <TextField
+                            id="destination"
+                            label="Destination"
+                            className={classes.textField}
+                            onChange={this.handleChange('destination')}
+                            margin="normal"
+                        />
+                        <TextField
+                            id="price"
+                            label="Price"
+                            className={classes.textField}
+                            onChange={this.handleChange('price')}
+                            margin="normal"
+                        />
+                    </div>
+                    <div className={classes.actions}>
+                        <Button onClick={this.createJourney} variant="contained" color="primary">Valider</Button>
+                    </div>
+                </form >
             </div>
         );
     }
 }
 
-export default CreateJourney;
+CreateJourney.propTypes = {
+    classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(CreateJourney);

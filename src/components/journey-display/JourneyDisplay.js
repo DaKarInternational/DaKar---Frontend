@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Journey from './../journey/Journey'
+import JourneyCard from './../journey-card/JourneyCard'
 import axios from 'axios';
 import Button from '@material-ui/core/Button';
 
@@ -93,7 +93,7 @@ class JourneyDisplay extends Component {
         } else if (!isLoaded) {
             elementContent = <div>Loading...</div>
         } else {
-            elementContent = <Journey key={journey.id} {...journey} />
+            elementContent = <JourneyCard key={journey.id} {...journey} />
         }
 
         return (

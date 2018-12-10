@@ -50,22 +50,31 @@ const styles = theme => ({
     icon: {},
 });
 
+/**
+ * Component that represents the navigation bar and the burger menu
+ */
 class NavBar extends Component {
 
     state = {
         open: false,
     };
 
+    /**
+     * Display or hide the menu
+     */
     handleToogle = () => {
         this.setState({ open: !this.state.open });
     };
 
+    /**
+     * Hide the menu, used when we click on a menu
+     */
     handleCloseDrawerMenu = () => {
         this.setState({ open: false });
     };
 
     render() {
-        const { classes, theme } = this.props;
+        const { classes } = this.props;
         const { open } = this.state;
         return (
             <div className={classes.root}>
@@ -92,25 +101,25 @@ class NavBar extends Component {
                 >
                     <div className={classes.toolbar} />
                     <MenuList>
-                        <MenuItem component={Link} to="/" onClick={this.handleCloseDrawerMenu}>
+                        <MenuItem component={Link} to="/" onClick={this.handleToogle}>
                             <ListItemIcon className={classes.icon}>
                                 <HomeIcon />
                             </ListItemIcon>
                             <ListItemText classes={{ primary: classes.primary }} inset primary="Home" />
                         </MenuItem>
-                        <MenuItem component={Link} to="/createJourney" onClick={this.handleCloseDrawerMenu}>
+                        <MenuItem component={Link} to="/createJourney" onClick={this.handleToogle}>
                             <ListItemIcon className={classes.icon}>
                                 <CreateIcon />
                             </ListItemIcon>
                             <ListItemText classes={{ primary: classes.primary }} inset primary="Create a journey" />
                         </MenuItem>
-                        <MenuItem component={Link} to="/journeyDisplay" onClick={this.handleCloseDrawerMenu}>
+                        <MenuItem component={Link} to="/journeyDisplay" onClick={this.handleToogle}>
                             <ListItemIcon className={classes.icon}>
                                 <FlightIcon />
                             </ListItemIcon>
                             <ListItemText classes={{ primary: classes.primary }} inset primary="See a specific journey" />
                         </MenuItem>
-                        <MenuItem component={Link} to="/journeys" onClick={this.handleCloseDrawerMenu}>
+                        <MenuItem component={Link} to="/journeys" onClick={this.handleToogle}>
                             <ListItemIcon className={classes.icon}>
                                 <ListIcon />
                             </ListItemIcon>
