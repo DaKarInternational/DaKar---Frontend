@@ -20,7 +20,7 @@ const JourneyCard = (props) => {
         try{
             img = require('../../assets/images/' + picture + '.jpg');
         }catch(e){
-            console.log('error', e);        
+            console.error('error', e);        
         }
         return img;
     }
