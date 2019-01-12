@@ -1,3 +1,11 @@
+can we just replace all that by an link to a doc or something ? 
+
+how the file JourneyListQuery.graphql.js has been generated again ?
+
+some doc on relay: 
+https://facebook.github.io/relay/docs/en/quick-start-guide.html
+
+
 # Relay
 - Le fichier Environment.js permet de gérer le client relay
 - Pour lancer des requêtes Graphql le schema doit être présent dans le projet
