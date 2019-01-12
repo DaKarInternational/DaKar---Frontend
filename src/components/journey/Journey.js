@@ -91,22 +91,19 @@ class Journey extends Component {
     }
 
     /**
- * Find a journey
- */
+    * Find a journey
+    */
     findJourney() {
         console.log('findJourney');
         // This is the GraphQL query for findJourney
         let query = `
             query findJourney {
-                findJourneyById(id:"`
-        query += this.state.journeyId
-        query += `") {
+                findJourneyById(id:${this.state.journeyId}) {
                     id
                     destination
                     price
                 }
-            }
-            `;
+            }`;
 
         // These variables are optional we can leave empty
         const variables = {};
