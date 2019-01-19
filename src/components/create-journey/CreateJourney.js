@@ -46,9 +46,13 @@ class CreateJourney extends Component {
     /**
      * Save the value of the field when it changes
      */
-    handleChange = name => event => {
+    handleChange = event => {
+        const target = event.target;
+        const value = target.value;
+        const name = target.name;
+    
         this.setState({
-            [name]: event.target.value,
+          [name]: value
         });
     };
 
@@ -110,18 +114,6 @@ class CreateJourney extends Component {
      */
     render() {
         const { classes } = this.props;
-        // Gestion d'erreur à définir
-        // const { error, isLoaded, journey, firstDisplay } = this.state;
-        // let elementContent = <div></div>;
-        // if (error) {
-        //     elementContent = <div>{error.message}</div>;
-        // } else if (firstDisplay) {
-        //     elementContent = <div></div>
-        // } else if (!isLoaded) {
-        //     elementContent = <div>Loading...</div>
-        // } else {
-        //     elementContent = <JourneyCard key={journey.id} {...journey} />
-        // }
 
         return (
 
@@ -132,14 +124,16 @@ class CreateJourney extends Component {
                             id="destination"
                             label="Destination"
                             className={classes.textField}
-                            onChange={this.handleChange('destination')}
+                            name="destination"
+                            onChange={this.handleChange}
                             margin="normal"
                         />
                         <TextField
                             id="price"
                             label="Price"
                             className={classes.textField}
-                            onChange={this.handleChange('price')}
+                            name="price"
+                            onChange={this.handleChange}
                             margin="normal"
                         />
                     </div>
