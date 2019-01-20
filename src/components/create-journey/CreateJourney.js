@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import JourneyCard from './../journey-card/JourneyCard'
-import axios from 'axios';
 import TextField from '@material-ui/core/TextField';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
+import { commitMutation, graphql } from "react-relay";
+import environment from './../../Environment';
 
 const styles = theme => ({
     container: {
@@ -19,7 +19,7 @@ const styles = theme => ({
     parent: {
         width: 500,
         margin: '0 auto',
-      },
+    },
     actions: {
         textAlign: 'center',
         marginTop: 20,
@@ -46,54 +46,67 @@ class CreateJourney extends Component {
     /**
      * Save the value of the field when it changes
      */
-    handleChange = name => event => {
+    handleChange = event => {
+        const target = event.target;
+        const value = target.value;
+        const name = target.name;
+    
         this.setState({
-            [name]: event.target.value,
+          [name]: value
         });
     };
 
     /**
-     * Create the new Journey
-     * @param {} e 
+     * Create the journey mutation
      */
-    createJourney = function (e) {
-        let query = `mutation {
-            createJourney(input:{ price: "`
-        query += this.state.price
-        query += `" destination: "`
-        query += this.state.destination
-        query += `" }){
-                        price
-                        destination
-                    }
-        }`;
+    createJourneyMutation = (destination, price, callback) => {
 
-        // These variables are optional we can leave empty
-        const variables = {};
+        const mutation = graphql`
+            mutation CreateJourneyMutation($input: JourneyInput!) {
+                createJourney(input: $input) {
+                    price
+                    destination
+                }
+            }
+        `
 
-        try {
-            axios.post('http://localhost:8080/graphql', {
-                query,
-                variables
-            }).then((response) => {
-                // Log the response so we can look at it in the console
-                console.dir(response.data)
-                // TODO : Gestion des erreurs
-                // Set the data to the state
-                this.setState(() => ({
-                    isLoaded: true,
-                    firstDisplay: false,
-                    journey: response.data.data.createJourney
-                }));
+        // Variables used by the mutation
+        const variables = {
+            input: {
+                destination,
+                price,
+                owner: ""
+            },
+        }
+
+        // Execute the mutation through relay
+        commitMutation(
+            environment,
+            {
+                mutation: mutation,
+                variables,
+                onCompleted: () => {
+                    callback()
+                },
+                onError: err => {
+                    console.error(err)
+                    this.setState(() => ({ err }))
+                }
+            },
+        )
+    }
+
+    /**
+     * Create the journey
+     */
+    createJourney = () => {
+        const { destination, price } = this.state
+        this.createJourneyMutation(destination, price,
+            () => {
                 // We redirect to the list of journeys
                 this.props.history.push('/journeys');
-            });
-        } catch (error) {
-            // If there's an error, set the error to the state
-            console.log('error : ' + error);
-            this.setState(() => ({ error }))
-        }
-    }.bind(this);
+            })
+    }
 
     /**
      * Display the form
@@ -101,18 +114,6 @@ class CreateJourney extends Component {
      */
     render() {
         const { classes } = this.props;
-        // Gestion d'erreur à définir
-        // const { error, isLoaded, journey, firstDisplay } = this.state;
-        // let elementContent = <div></div>;
-        // if (error) {
-        //     elementContent = <div>{error.message}</div>;
-        // } else if (firstDisplay) {
-        //     elementContent = <div></div>
-        // } else if (!isLoaded) {
-        //     elementContent = <div>Loading...</div>
-        // } else {
-        //     elementContent = <JourneyCard key={journey.id} {...journey} />
-        // }
 
         return (
 
@@ -123,14 +124,16 @@ class CreateJourney extends Component {
                             id="destination"
                             label="Destination"
                             className={classes.textField}
-                            onChange={this.handleChange('destination')}
+                            name="destination"
+                            onChange={this.handleChange}
                             margin="normal"
                         />
                         <TextField
                             id="price"
                             label="Price"
                             className={classes.textField}
-                            onChange={this.handleChange('price')}
+                            name="price"
+                            onChange={this.handleChange}
                             margin="normal"
                         />
                     </div>
