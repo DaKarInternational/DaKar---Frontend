@@ -48,7 +48,7 @@ const JourneyCard = (props) => {
                     <CardActions>
                         <Button size="small" color="primary" component={Link} to={`/journey/${props.journey.id}`}>
                             Go To Journey
-                    </Button>
+                        </Button>
                     </CardActions>
                 </Card>
             ) : null}
