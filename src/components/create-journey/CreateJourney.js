@@ -27,7 +27,7 @@ const styles = theme => ({
 });
 
 /**
- * Class allowing the feature of creation of a journey
+ * Component allowing the feature of creation of a journey
  */
 class CreateJourney extends Component {
 
@@ -38,8 +38,7 @@ class CreateJourney extends Component {
             error: null,
             isLoaded: false,
             firstDisplay: true,
-            journey: [],
-            journeyId: null
+            journey: {} // empty object for init
         }
     };
 

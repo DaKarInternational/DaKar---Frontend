@@ -1,6 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom'
 
+/**
+ * Definition of a component using the lambda
+ */
 const Home = () => (
   <div>
     <nav>

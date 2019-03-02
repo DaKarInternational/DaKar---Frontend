@@ -9,7 +9,8 @@ import Grid from '@material-ui/core/Grid';
  */
 
 // This is the GraphQL query for allJourney
-const query = graphql`
+// https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Litt%C3%A9raux_gabarits
+const query = graphql `
     query JourneyListQuery {
       allJourney {
         destination
