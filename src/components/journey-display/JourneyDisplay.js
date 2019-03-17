@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
-import Journey from './../journey/Journey'
+import JourneyCard from './../journey-card/JourneyCard'
 import axios from 'axios';
+import Button from '@material-ui/core/Button';
 
 /**
  * Class allowing the feature of displaying a journey
@@ -41,6 +42,8 @@ class JourneyDisplay extends Component {
                 firstDisplay: false,
                 journey: response.data.data.findJourneyById
             }));
+            // We redirect to a journey
+            this.props.history.push(`/journey/${response.data.data.findJourneyById.id}`);
 
         } catch (error) {
             // If there's an error, set the error to the state
@@ -80,26 +83,11 @@ class JourneyDisplay extends Component {
 
     // The render() of the JourneyDisplay page
     render() {
-        const { error, isLoaded, journey, firstDisplay } = this.state;
-        let elementContent;
-        if (error) {
-            elementContent = <div>{error.message}</div>;
-        } else if (firstDisplay) {
-            elementContent = <div></div>
-        } else if (!isLoaded) {
-            elementContent = <div>Loading...</div>
-        } else {
-            elementContent = <Journey key={journey.id} {...journey} />
-        }
-
         return (
             <div>
                 <label htmlFor="journey-id">Visualiser une journey : </label>
                 <input id="journey-id" type="text" name="journeyId" onChange={this.handleChange} />
-                <button onClick={this.findJourney}>Valider</button>
-                <div>
-                    {elementContent}
-                </div>
+                <Button onClick={this.findJourney} variant="contained" color="primary">Valider</Button>
             </div>
         );
     }

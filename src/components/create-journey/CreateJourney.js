@@ -1,7 +1,30 @@
 import React, { Component } from 'react'
-import Journey from './../journey/Journey'
-import axios from 'axios';
-import JourneyService from '../../services/JourneyService'
+import TextField from '@material-ui/core/TextField';
+import { withStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
+import Button from '@material-ui/core/Button';
+import { commitMutation, graphql } from "react-relay";
+import environment from './../../Environment';
+
+const styles = theme => ({
+    container: {
+        display: 'flex',
+        flexWrap: 'wrap',
+    },
+    textField: {
+        marginLeft: theme.spacing.unit,
+        marginRight: theme.spacing.unit,
+        width: 200,
+    },
+    parent: {
+        width: 500,
+        margin: '0 auto',
+    },
+    actions: {
+        textAlign: 'center',
+        marginTop: 20,
+    }
+});
 
 /**
  * Component allowing the feature of creation of a journey
@@ -20,96 +43,110 @@ class CreateJourney extends Component {
     };
 
     /**
-     * Handle change on the input field
-     * @param {} e the onChange event 
+     * Save the value of the field when it changes
      */
-    handleChange = function (e) {
-        // console.log(e.target.name);
-        switch (e.target.name) {
-            case 'destination':
-                this.setState({ destination: e.target.value });
-                break;
-            case 'price':
-                this.setState({ price: e.target.value });
-                break;
-            default:
-                console.error('No such state attribut');
-                break;
-        }
-    }.bind(this);
+    handleChange = event => {
+        const target = event.target;
+        const value = target.value;
+        const name = target.name;
+    
+        this.setState({
+          [name]: value
+        });
+    };
 
     /**
-     * Create the new Journey once the button is clicked
-     * @param {} e the onClick event
+     * Create the journey mutation
      */
-    createJourney = function (e) {
-        JourneyService.test();
+    createJourneyMutation = (destination, price, callback) => {
 
-        let query = `mutation {
-            createJourney(input:{ price: "${this.state.price}" destination: "${this.state.destination}" }){
-                        price
-                        destination
-                    }
-        }`;
+        const mutation = graphql`
+            mutation CreateJourneyMutation($input: JourneyInput!) {
+                createJourney(input: $input) {
+                    price
+                    destination
+                }
+            }
+        `
 
-        // These variables are optional we can leave empty
-        const variables = {};
-
-        try {
-            // is there a way to use Relay here instead of directly axios ?
-            axios.post('http://localhost:8080/graphql', {// TODO export this URL into a config file
-                query,
-                variables
-            }).then((response) => {
-                // Log the response so we can look at it in the console
-                console.dir(response.data);
-                // TODO : Gestion des erreurs
-                // Set the data to the state
-                this.setState(() => ({
-                    isLoaded: true,
-                    firstDisplay: false,
-                    journey: response.data.data.createJourney // put the Journey that we received from the back in the state
-                }));
-                console.dir(this.state);
-            });
-        } catch (error) {
-            // If there's an error, set the error to the state
-            console.log('error: ' + error);
-            this.setState(() => ({ error }))
+        // Variables used by the mutation
+        const variables = {
+            input: {
+                destination,
+                price,
+                owner: ""
+            },
         }
-    }.bind(this);
 
-    // The render() of the JourneyDisplay page
+        // Execute the mutation through relay
+        commitMutation(
+            environment,
+            {
+                mutation: mutation,
+                variables,
+                onCompleted: () => {
+                    callback()
+                },
+                onError: err => {
+                    console.error(err)
+                    this.setState(() => ({ err }))
+                }
+            },
+        )
+    }
+
+    /**
+     * Create the journey
+     */
+    createJourney = () => {
+        const { destination, price } = this.state
+        this.createJourneyMutation(destination, price,
+            () => {
+                // We redirect to the list of journeys
+                this.props.history.push('/journeys');
+            })
+    }
+
+    /**
+     * Display the form
+     * If there is an error, it's also displayed
+     */
     render() {
-        const { error, isLoaded, journey, firstDisplay } = this.state;
-        let elementContent;
-        if (error) {
-            elementContent = <div>{error.message}</div>;
-        } else if (firstDisplay) {
-            elementContent = <div></div>
-        } else if (!isLoaded) {
-            elementContent = <div>Loading...</div>
-        } else {
-            // usage of the spread operator:
-            // https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Op%C3%A9rateurs/Syntaxe_d%C3%A9composition
-            elementContent = <Journey {...journey} /> 
-        }
+        const { classes } = this.props;
 
         return (
-            <div>
-                <label htmlFor="destination">Journey destination: </label>
-                <input id="destination" type="text" name="destination" onChange={this.handleChange} />
-                <br />
-                <label htmlFor="price">Price: </label>
-                <input id="price" type="text" name="price" onChange={this.handleChange} />
-                <br />
-                <button onClick={this.createJourney}>Create</button>
-                <div>
-                    {elementContent}
-                </div>
+
+            <div className={classes.parent}>
+                <form>
+                    <div className={classes.container}>
+                        <TextField
+                            id="destination"
+                            label="Destination"
+                            className={classes.textField}
+                            name="destination"
+                            onChange={this.handleChange}
+                            margin="normal"
+                        />
+                        <TextField
+                            id="price"
+                            label="Price"
+                            className={classes.textField}
+                            name="price"
+                            onChange={this.handleChange}
+                            margin="normal"
+                        />
+                    </div>
+                    <div className={classes.actions}>
+                        <Button onClick={this.createJourney} variant="contained" color="primary">Valider</Button>
+                    </div>
+                </form >
             </div>
         );
     }
 }
 
-export default CreateJourney;
+CreateJourney.propTypes = {
+    classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(CreateJourney);
